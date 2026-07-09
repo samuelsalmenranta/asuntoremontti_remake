@@ -313,7 +313,7 @@ p + p { margin-top: 1em; }
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-bottom: 48px;
+  margin-bottom: 24px;
 }
 .hero__metrics {
   display: grid;
