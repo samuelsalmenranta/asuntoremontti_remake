@@ -1,0 +1,57 @@
+---
+import { site, services, areas } from '~/data/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="container">
+    <div class="site-footer__grid">
+      <div class="site-footer__col">
+        <div class="site-footer__brand">asunto<span>remontti</span>.fi</div>
+        <p style="color:var(--ink-3); font-size:var(--fs-sm); margin-bottom:16px;">
+          Asuntoremontit Lahdessa ja Päijät-Hämeessä yli 30 vuoden kokemuksella.
+        </p>
+        <p style="color:var(--bg); font-size:var(--fs-sm);">
+          <a href={`tel:${site.phone}`}>{site.phoneDisplay}</a><br />
+          <a href={`mailto:${site.email}`}>{site.email}</a><br />
+          {site.address.street}<br />
+          {site.address.postalCode} {site.address.city}
+        </p>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Palvelut</h4>
+        <ul>
+          {services.map(s => (
+            <li><a href={`/palvelut/${s.slug}/`}>{s.name}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Alueet</h4>
+        <ul>
+          <li><a href="/">Lahti</a></li>
+          {areas.map(a => (
+            <li><a href={`/alueet/${a.slug}/`}>{a.name}</a></li>
+          ))}
+        </ul>
+      </div>
+
+      <div class="site-footer__col">
+        <h4>Sivusto</h4>
+        <ul>
+          <li><a href="/">Etusivu</a></li>
+          <li><a href="/palvelut/">Palvelut</a></li>
+          <li><a href="/alueet/">Alueet</a></li>
+          <li><a href="/blogi/">Blogi</a></li>
+          <li><a href="/yhteystiedot/">Yhteystiedot</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="site-footer__meta">
+      <div>© {year} {site.legalName} · Y-tunnus {site.vatId.replace('FI','')}</div>
+      <div>Lahti · Hollola · Nastola · Orimattila · Heinola</div>
+    </div>
+  </div>
+</footer>

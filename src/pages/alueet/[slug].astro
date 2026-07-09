@@ -1,0 +1,118 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import ContactForm from '~/components/ContactForm.astro';
+import { areas, services, site } from '~/data/site';
+import type { Area } from '~/data/site';
+
+export async function getStaticPaths() {
+  return areas.map(area => ({
+    params: { slug: area.slug },
+    props: { area },
+  }));
+}
+
+interface Props { area: Area }
+const { area } = Astro.props;
+---
+<BaseLayout
+  title={area.titleTag}
+  description={area.metaDescription}
+  canonicalPath={`/alueet/${area.slug}/`}
+  breadcrumbSchema={[
+    { name: 'Etusivu', url: '/' },
+    { name: 'Alueet', url: '/alueet/' },
+    { name: area.name, url: `/alueet/${area.slug}/` },
+  ]}
+>
+  <!-- HERO -->
+  <section class="hero" style="padding-block: clamp(48px, 6vw, 96px) clamp(32px, 5vw, 64px);">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Etusivu</a><span class="breadcrumb__sep">/</span>
+        <a href="/alueet/">Alueet</a><span class="breadcrumb__sep">/</span>{area.name}
+      </div>
+      <div class="eyebrow" style="margin-bottom:16px;">Päijät-Häme · Paikallinen tekijä</div>
+      <h1 style="max-width:20ch; margin-bottom:24px;">{area.heroTitle}</h1>
+      <p style="font-size:clamp(var(--fs-lg), 2vw, var(--fs-xl)); color:var(--ink-2); max-width:60ch; margin-bottom:32px;">
+        {area.intro}
+      </p>
+      <div style="display:flex; flex-wrap:wrap; gap:12px;">
+        <a href="/yhteystiedot/" class="btn btn--primary">Pyydä tarjous</a>
+        <a href={`tel:${site.phone}`} class="btn btn--outline">Soita {site.phoneDisplay}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAIKALLINEN KONTEKSTI -->
+  <section class="section section--soft">
+    <div class="container">
+      <div class="grid-2" style="align-items:start;">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Paikallinen tuntemus</div>
+          <h2 style="margin-bottom:24px;">Tunnen {area.name}n rakennuskannan.</h2>
+          <p style="color:var(--ink-2); margin-bottom:16px;">{area.localContext}</p>
+          <p style="color:var(--ink-2);">
+            Paikallinen tekijä tarkoittaa sinulle nopeaa reagointia ja joustavaa aikataulua.
+          </p>
+        </div>
+        <div style="background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:28px;">
+          <div class="eyebrow" style="margin-bottom:12px;">Palvelen mm. näissä</div>
+          <ul class="checklist">
+            {area.neighborhoods.map(n => <li>{n}</li>)}
+          </ul>
+          <p style="color:var(--ink-2); font-size:var(--fs-sm); margin-top:16px;">
+            Postinumerot: {area.postalCodes.join(', ')}. Myös muualta {area.name}n alueelta.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PALVELUT ALUEELLA -->
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Palvelut {area.name}ssa</div>
+          <h2 class="section-heading__title">Kaikki remontit paikallisesti.</h2>
+        </div>
+        <p class="section-heading__lead">
+          Toteutan {area.name}ssa samat palvelut kuin Lahdessa, samalla huolellisuudella.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        {services.map(s => (
+          <a class="card" href={`/palvelut/${s.slug}/`}>
+            <h3>{s.name}</h3>
+            <p>{s.heroLead}</p>
+            <span class="card__arrow">Lue palvelusta →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Yhteydenotto</div>
+          <h2 style="max-width:22ch;">Remontti {area.name}ssa? Ota yhteyttä.</h2>
+          <p style="color:var(--ink-3); margin-top:16px; max-width:44ch;">
+            Soita tai jätä viesti, niin palataan asiaan.
+          </p>
+          <p style="margin-top:24px;">
+            <a href={`tel:${site.phone}`} style="color:var(--bg); font-family:var(--font-display); font-size:var(--fs-xl); text-decoration:none;">
+              📞 {site.phoneDisplay}
+            </a>
+          </p>
+        </div>
+        <div style="background:var(--surface); color:var(--ink); padding:32px; border-radius:var(--radius-lg);">
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,35 @@
+---
+import { site } from '~/data/site';
+---
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__logo" aria-label="Etusivu">
+      asunto<span>remontti</span>.fi
+    </a>
+
+    <nav class="site-nav" aria-label="Päävalikko">
+      <a href="/palvelut/">Palvelut</a>
+      <a href="/alueet/">Alueet</a>
+      <a href="/blogi/">Blogi</a>
+      <a href="/yhteystiedot/">Yhteystiedot</a>
+    </nav>
+
+    <div style="display:flex;gap:12px;align-items:center;">
+      <a href={`tel:${site.phone}`} class="site-header__phone" aria-label={`Soita ${site.phoneDisplay}`}>
+        {site.phoneDisplay}
+      </a>
+      <a href="/yhteystiedot/" class="site-header__cta">Pyydä tarjous</a>
+      <label for="nav-toggle" class="mobile-toggle" aria-label="Avaa valikko">Valikko</label>
+    </div>
+  </div>
+
+  <input type="checkbox" id="nav-toggle" />
+  <nav class="mobile-nav" aria-label="Mobiilivalikko">
+    <a href="/">Etusivu</a>
+    <a href="/palvelut/">Palvelut</a>
+    <a href="/alueet/">Alueet</a>
+    <a href="/blogi/">Blogi</a>
+    <a href="/yhteystiedot/">Yhteystiedot</a>
+    <a href={`tel:${site.phone}`}>Soita: {site.phoneDisplay}</a>
+  </nav>
+</header>

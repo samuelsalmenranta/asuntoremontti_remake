@@ -1,0 +1,44 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { areas } from '~/data/site';
+
+const title = 'Alueet | Remontit Päijät-Hämeessä | asuntoremontti.fi';
+const description = 'Toimimme koko Päijät-Hämeessä: Lahti, Hollola, Nastola, Orimattila ja Heinola. Valitse alueesi ja katso paikallinen palvelu.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/alueet/"
+  breadcrumbSchema={[
+    { name: 'Etusivu', url: '/' },
+    { name: 'Alueet', url: '/alueet/' },
+  ]}
+>
+  <section class="section">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Etusivu</a><span class="breadcrumb__sep">/</span>Alueet
+      </div>
+      <div class="eyebrow" style="margin-bottom:16px;">Alueet</div>
+      <h1 style="max-width:20ch; margin-bottom:24px;">Missä toimimme.</h1>
+      <p style="font-size:var(--fs-lg); color:var(--ink-2); max-width:56ch; margin-bottom:64px;">
+        Toimipisteemme on Lahdessa ja palvelemme koko Päijät-Hämeen alueen. Valitse alueesi alla, niin näet paikalliset tiedot ja yhteydenoton.
+      </p>
+
+      <div class="grid-3">
+        <a class="card" href="/">
+          <h3>Lahti</h3>
+          <p>Toimipisteemme sijaitsee Lahdessa. Kaikki palvelumme paikallisesti.</p>
+          <span class="card__arrow">Etusivulle →</span>
+        </a>
+        {areas.map(a => (
+          <a class="card" href={`/alueet/${a.slug}/`}>
+            <h3>{a.name}</h3>
+            <p>{a.intro}</p>
+            <span class="card__arrow">Katso {a.name}n sivu →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

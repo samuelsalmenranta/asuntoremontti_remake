@@ -1,0 +1,77 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { site } from '~/data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  publishDate: Date;
+  updatedDate?: Date;
+  author: string;
+  category: string;
+  slug: string;
+}
+
+const { title, description, publishDate, updatedDate, author, category, slug } = Astro.props;
+
+const dateFmt = new Intl.DateTimeFormat('fi-FI', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description: description,
+  datePublished: publishDate.toISOString(),
+  ...(updatedDate ? { dateModified: updatedDate.toISOString() } : {}),
+  author: { '@type': 'Organization', name: author, url: site.url },
+  publisher: {
+    '@type': 'Organization',
+    name: site.name,
+    logo: { '@type': 'ImageObject', url: `${site.url}/favicon.svg` },
+  },
+  mainEntityOfPage: `${site.url}/blogi/${slug}/`,
+  articleSection: category,
+};
+---
+<BaseLayout
+  title={`${title} | Blogi | asuntoremontti.fi`}
+  description={description}
+  canonicalPath={`/blogi/${slug}/`}
+  breadcrumbSchema={[
+    { name: 'Etusivu', url: '/' },
+    { name: 'Blogi', url: '/blogi/' },
+    { name: title, url: `/blogi/${slug}/` },
+  ]}
+>
+  <article class="section">
+    <div class="container" style="max-width:800px;">
+      <div class="breadcrumb">
+        <a href="/">Etusivu</a><span class="breadcrumb__sep">/</span>
+        <a href="/blogi/">Blogi</a><span class="breadcrumb__sep">/</span>{category}
+      </div>
+      <div class="eyebrow" style="margin-bottom:16px;">{category}</div>
+      <h1 style="max-width:24ch; margin-bottom:24px;">{title}</h1>
+      <p style="font-family:var(--font-mono); font-size:var(--fs-sm); color:var(--ink-2); margin-bottom:48px;">
+        {dateFmt.format(publishDate)}
+        {updatedDate && ` · Päivitetty ${dateFmt.format(updatedDate)}`}
+        · {author}
+      </p>
+
+      <div class="prose">
+        <slot />
+      </div>
+
+      <hr style="margin:64px 0; border:0; border-top:1px solid var(--line);" />
+
+      <div class="callout">
+        <p><strong>Suunnitteletko remonttia Lahdessa tai Päijät-Hämeessä?</strong> Kartoituskäynti ja tarjous ovat maksuttomia.</p>
+        <p style="margin-top:12px;">
+          <a href="/yhteystiedot/" class="btn btn--primary" style="margin-right:8px;">Pyydä tarjous</a>
+          <a href={`tel:${site.phone}`} class="btn btn--outline">Soita {site.phoneDisplay}</a>
+        </p>
+      </div>
+    </div>
+  </article>
+
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+</BaseLayout>

@@ -1,0 +1,36 @@
+---
+interface FaqItem { q: string; a: string; }
+interface Props {
+  items: readonly FaqItem[] | FaqItem[];
+  title?: string;
+}
+const { items, title = 'Usein kysyttyä' } = Astro.props;
+
+// FAQPage schema — auttaa Google-rich resulteissa
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map(i => ({
+    '@type': 'Question',
+    name: i.q,
+    acceptedAnswer: { '@type': 'Answer', text: i.a },
+  })),
+};
+---
+<section class="section section--tight">
+  <div class="container">
+    <div class="section-heading">
+      <h2 class="section-heading__title">{title}</h2>
+    </div>
+    <div class="faq" style="max-width:800px;">
+      {items.map(item => (
+        <details>
+          <summary>{item.q}</summary>
+          <p>{item.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />

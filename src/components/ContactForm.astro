@@ -1,0 +1,69 @@
+---
+import { services } from '~/data/site';
+interface Props {
+  defaultService?: string;
+}
+const { defaultService = '' } = Astro.props;
+---
+<!--
+  Lomake toimii ilman JavaScriptiä.
+  - Netlify: form-attribuutti "data-netlify" hoitaa lähetyksen ilman koodia (jos hostaus on Netlifyssä).
+  - Muu hostaus: aseta action="/yhteystiedot/kiitos/" ja liitä oma backend, tai käytä Formspree/Basiniä.
+-->
+<form
+  class="form"
+  name="tarjouspyynto"
+  method="POST"
+  action="/kiitos/"
+  data-netlify="true"
+  netlify-honeypot="bot-field"
+>
+  <input type="hidden" name="form-name" value="tarjouspyynto" />
+  <p style="display:none;"><label>Älä täytä: <input name="bot-field" /></label></p>
+
+  <div class="form__row form__row--2">
+    <div>
+      <label for="nimi">Nimi *</label>
+      <input id="nimi" name="nimi" type="text" autocomplete="name" required />
+    </div>
+    <div>
+      <label for="puhelin">Puhelin *</label>
+      <input id="puhelin" name="puhelin" type="tel" autocomplete="tel" required />
+    </div>
+  </div>
+
+  <div class="form__row form__row--2">
+    <div>
+      <label for="email">Sähköposti *</label>
+      <input id="email" name="email" type="email" autocomplete="email" required />
+    </div>
+    <div>
+      <label for="paikkakunta">Paikkakunta</label>
+      <input id="paikkakunta" name="paikkakunta" type="text" placeholder="Esim. Lahti" />
+    </div>
+  </div>
+
+  <div>
+    <label for="palvelu">Mitä remontoit?</label>
+    <select id="palvelu" name="palvelu">
+      <option value="">Valitse palvelu…</option>
+      {services.map(s => (
+        <option value={s.name} selected={s.slug === defaultService}>{s.name}</option>
+      ))}
+      <option value="Muu">Muu / en ole varma</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="viesti">Kerro lisää projektista *</label>
+    <textarea
+      id="viesti"
+      name="viesti"
+      required
+      placeholder="Esim. kylpyhuoneen koko, aikataulutoive, olemassa olevat suunnitelmat…"
+    ></textarea>
+    <p class="form__help">Emme jaa tietojasi kolmansille osapuolille.</p>
+  </div>
+
+  <button type="submit" class="btn btn--primary btn--full">Lähetä tarjouspyyntö</button>
+</form>

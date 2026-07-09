@@ -1,0 +1,39 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { services } from '~/data/site';
+
+const title = 'Palvelut | Remonttipalvelut Lahdessa ja Päijät-Hämeessä';
+const description = 'Kaikki remonttipalvelumme Lahden ja Päijät-Hämeen alueella: keittiöremontti, kylpyhuoneremontti, huoneistoremontti, saunaremontti sekä laatoitus ja vedeneristys.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/palvelut/"
+  breadcrumbSchema={[
+    { name: 'Etusivu', url: '/' },
+    { name: 'Palvelut', url: '/palvelut/' },
+  ]}
+>
+  <section class="section">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Etusivu</a><span class="breadcrumb__sep">/</span>Palvelut
+      </div>
+      <div class="eyebrow" style="margin-bottom:16px;">Palvelut</div>
+      <h1 style="max-width:20ch; margin-bottom:24px;">Remonttipalvelut Lahdessa.</h1>
+      <p style="font-size:var(--fs-lg); color:var(--ink-2); max-width:56ch; margin-bottom:64px;">
+        Valitse palvelu, niin näet mitä siihen kuuluu, kauanko se kestää ja mistä hinnasta lähdemme liikkeelle.
+      </p>
+
+      <div class="grid-3">
+        {services.map(s => (
+          <a class="card" href={`/palvelut/${s.slug}/`}>
+            <h3>{s.name}</h3>
+            <p>{s.heroLead}</p>
+            <span class="card__arrow">Lue lisää →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,167 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import ContactForm from '~/components/ContactForm.astro';
+import ProcessSteps from '~/components/ProcessSteps.astro';
+import FAQ from '~/components/FAQ.astro';
+import { site, services, areas } from '~/data/site';
+
+const title = 'Asuntoremontti Lahti | Keittiö, kylpyhuone & huoneisto | asuntoremontti.fi';
+const description = 'Asuntoremontit Lahdessa ja Päijät-Hämeessä: keittiö, kylpyhuone, sauna ja huoneistoremontit. Yli 30 vuoden kokemuksella. Soita 046 560 3849.';
+
+const faq = [
+  {
+    q: 'Millä alueella toimit?',
+    a: 'Toimin pääasiassa Lahdessa ja Päijät-Hämeessä: Hollola, Nastola, Orimattila, Heinola, Asikkala.',
+  },
+  {
+    q: 'Miten remontin tilaus etenee?',
+    a: 'Soita tai lähetä viesti, niin sovitaan aika jolloin käyn katsomassa kohteen. Sen jälkeen saat tarjouksen ja sovitaan aikataulu.',
+  },
+  {
+    q: 'Voinko käyttää kotitalousvähennystä?',
+    a: 'Kyllä. Kotitalousvähennys kattaa työn osuuden asunnon kunnossapito- ja perusparannustöistä. Tarjouksessani työ ja materiaali on eritelty selkeästi.',
+  },
+  {
+    q: 'Kauanko remontti tavallisesti kestää?',
+    a: 'Kylpyhuoneremontti 3–5 viikkoa, keittiöremontti 2–4 viikkoa, koko asunnon remontti tyypillisesti 4–8 viikkoa.',
+  },
+];
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/"
+  includeLocalBusinessSchema={true}
+>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container">
+      <div class="eyebrow hero__eyebrow">Lahti · Päijät-Häme</div>
+      <h1 class="hero__title">Asuntoremontit Lahdessa yli 30 vuoden kokemuksella.</h1>
+      <p class="hero__lead">
+        Keittiö, kylpyhuone, sauna tai koko asunto — hoidan remontin alusta loppuun.
+        Henkilökohtaista palvelua, huolellista työtä ja selkeä hinnoittelu.
+      </p>
+      <div class="hero__actions">
+        <a href="/yhteystiedot/" class="btn btn--primary">Pyydä tarjous</a>
+        <a href={`tel:${site.phone}`} class="btn btn--outline">Soita {site.phoneDisplay}</a>
+      </div>
+
+      <div class="hero__metrics">
+        <div class="metric">
+          <div class="metric__value">30+</div>
+          <div class="metric__label">Vuotta kokemusta</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PALVELUT -->
+  <section class="section section--soft" id="palvelut">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Palvelut</div>
+          <h2 class="section-heading__title">Mitä remontoin.</h2>
+        </div>
+        <p class="section-heading__lead">
+          Kaikki asuntoremontit yhden tekijän toimesta — tiedät kuka työn tekee.
+        </p>
+      </div>
+
+      <div class="grid-3">
+        {services.map(s => (
+          <a class="card" href={`/palvelut/${s.slug}/`}>
+            <h3>{s.name}</h3>
+            <p>{s.heroLead}</p>
+            <span class="card__arrow">Lue lisää →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PROSESSI -->
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Prosessi</div>
+          <h2 class="section-heading__title">Miten remontti etenee.</h2>
+        </div>
+        <p class="section-heading__lead">
+          Selkeä kulku alusta loppuun — tiedät missä mennään.
+        </p>
+      </div>
+      <ProcessSteps />
+    </div>
+  </section>
+
+  <!-- MIKSI MINUT -->
+  <section class="section section--soft">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Miksi minut</div>
+          <h2>Henkilökohtaista palvelua, ei isoa firmaa.</h2>
+          <p style="color:var(--ink-2); margin-top:16px; max-width:48ch;">
+            Kun tilaat minulta, tiedät kuka remontin tekee. Olen itse joka päivä kohteessa — ei alihankkijoita, ei välikäsiä.
+          </p>
+        </div>
+        <ul class="checklist">
+          {site.usp.map(u => <li>{u}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ALUEET -->
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Alueet</div>
+          <h2 class="section-heading__title">Missä toimin.</h2>
+        </div>
+        <p class="section-heading__lead">
+          Lahden lisäksi palvelen lähikuntia Päijät-Hämeessä.
+        </p>
+      </div>
+      <div class="grid-3">
+        {areas.map(a => (
+          <a class="card" href={`/alueet/${a.slug}/`}>
+            <h3>Remontti {a.name}</h3>
+            <p>{a.intro}</p>
+            <span class="card__arrow">Katso {a.name}n sivu →</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <FAQ items={faq} />
+
+  <!-- CTA / LOMAKE -->
+  <section class="section section--dark" id="yhteydenotto">
+    <div class="container">
+      <div class="grid-2">
+        <div>
+          <div class="eyebrow" style="margin-bottom:12px;">Yhteydenotto</div>
+          <h2 style="max-width:20ch;">Remontti mielessä? Ota yhteyttä.</h2>
+          <p style="color:var(--ink-3); margin-top:16px; max-width:44ch;">
+            Soita tai jätä viesti, niin palataan asiaan.
+          </p>
+          <p style="margin-top:24px;">
+            <a href={`tel:${site.phone}`} style="color:var(--bg); font-family:var(--font-display); font-size:var(--fs-xl); text-decoration:none;">
+              📞 {site.phoneDisplay}
+            </a>
+          </p>
+        </div>
+        <div style="background:var(--surface); color:var(--ink); padding:32px; border-radius:var(--radius-lg);">
+          <ContactForm />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

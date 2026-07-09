@@ -1,0 +1,52 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+
+const dateFmt = new Intl.DateTimeFormat('fi-FI', { day: 'numeric', month: 'long', year: 'numeric' });
+
+const title = 'Blogi | Remonttivinkit ja hinnat | asuntoremontti.fi';
+const description = 'Remonttivinkit, hinta-arviot ja opas kylpyhuone- ja keittiöremonttiin Lahdessa ja Päijät-Hämeessä.';
+---
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath="/blogi/"
+  breadcrumbSchema={[
+    { name: 'Etusivu', url: '/' },
+    { name: 'Blogi', url: '/blogi/' },
+  ]}
+>
+  <section class="section">
+    <div class="container">
+      <div class="breadcrumb">
+        <a href="/">Etusivu</a><span class="breadcrumb__sep">/</span>Blogi
+      </div>
+      <div class="eyebrow" style="margin-bottom:16px;">Blogi</div>
+      <h1 style="max-width:20ch; margin-bottom:24px;">Remonttivinkit ja hinnat.</h1>
+      <p style="font-size:var(--fs-lg); color:var(--ink-2); max-width:56ch; margin-bottom:64px;">
+        Käytännön oppaita, hinta-arvioita ja vastauksia yleisimpiin kysymyksiin remonteista Lahden ja Päijät-Hämeen alueella.
+      </p>
+
+      {posts.length === 0 ? (
+        <p style="color:var(--ink-2);">Blogiartikkelit julkaistaan pian. Lisää artikkeleita hakemistoon <code>src/content/blog/</code>.</p>
+      ) : (
+        <div class="grid-3">
+          {posts.map(post => (
+            <a class="card" href={`/blogi/${post.id.replace(/\.md$/, '')}/`}>
+              <div class="eyebrow" style="margin-bottom:8px;">{post.data.category}</div>
+              <h3>{post.data.title}</h3>
+              <p>{post.data.description}</p>
+              <span class="card__arrow">Lue artikkeli →</span>
+              <div style="margin-top:16px; font-family:var(--font-mono); font-size:var(--fs-xs); color:var(--ink-3);">
+                {dateFmt.format(post.data.publishDate)}
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

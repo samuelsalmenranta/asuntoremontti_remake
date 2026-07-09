@@ -1,0 +1,24 @@
+---
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { site } from '~/data/site';
+---
+<BaseLayout
+  title="Kiitos yhteydenotosta | asuntoremontti.fi"
+  description="Viestisi on lähetetty. Otamme sinuun yhteyttä arkipäivinä."
+  canonicalPath="/kiitos/"
+  noindex={true}
+>
+  <section class="section">
+    <div class="container" style="max-width:640px;">
+      <div class="eyebrow" style="margin-bottom:16px;">Yhteydenotto vastaanotettu</div>
+      <h1 style="margin-bottom:24px;">Kiitos yhteydenotostasi.</h1>
+      <p style="font-size:var(--fs-lg); color:var(--ink-2); margin-bottom:32px;">
+        Otamme sinuun yhteyttä arkipäivinä. Jos asia on kiireellinen, soita suoraan.
+      </p>
+      <a href={`tel:${site.phone}`} class="btn btn--primary">Soita {site.phoneDisplay}</a>
+      <p style="margin-top:32px;">
+        <a href="/">← Palaa etusivulle</a>
+      </p>
+    </div>
+  </section>
+</BaseLayout>

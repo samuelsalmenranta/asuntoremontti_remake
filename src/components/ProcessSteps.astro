@@ -1,0 +1,17 @@
+---
+const steps = [
+  { title: 'Yhteydenotto', body: 'Soita tai jätä viesti. Kerro lyhyesti mitä remontoit ja missä kohde on.' },
+  { title: 'Kohteessa käynti', body: 'Käyn katsomassa kohteen, kuuntelen toiveesi ja arvioin laajuuden.' },
+  { title: 'Tarjous', body: 'Saat selkeän tarjouksen. Työ ja materiaalit eritellään erikseen.' },
+  { title: 'Toteutus', body: 'Teen remontin sovitussa aikataulussa. Pidän sinut ajan tasalla koko ajan.' },
+  { title: 'Luovutus', body: 'Käymme lopputuloksen yhdessä läpi. Siisti jälki ja valmis koti.' },
+];
+---
+<div class="process">
+  {steps.map(step => (
+    <article class="process__step">
+      <h3>{step.title}</h3>
+      <p>{step.body}</p>
+    </article>
+  ))}
+</div>

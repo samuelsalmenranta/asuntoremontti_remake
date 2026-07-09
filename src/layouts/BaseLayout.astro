@@ -1,0 +1,103 @@
+---
+import '~/styles/global.css';
+import Header from '~/components/Header.astro';
+import Footer from '~/components/Footer.astro';
+import SchemaLocalBusiness from '~/components/SchemaLocalBusiness.astro';
+import { site } from '~/data/site';
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;      // esim. '/palvelut/keittioremontti-lahti/'
+  ogImage?: string;            // suhteellinen tai absoluuttinen
+  noindex?: boolean;
+  includeLocalBusinessSchema?: boolean;
+  breadcrumbSchema?: Array<{ name: string; url: string }>;
+}
+
+const {
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  ogImage = '/og.jpg',
+  noindex = false,
+  includeLocalBusinessSchema = false,
+  breadcrumbSchema,
+} = Astro.props;
+
+const canonical = new URL(canonicalPath, site.url).toString();
+const ogImageUrl = ogImage.startsWith('http') ? ogImage : new URL(ogImage, site.url).toString();
+
+const breadcrumbLd = breadcrumbSchema && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbSchema.map((item, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: item.name,
+    item: new URL(item.url, site.url).toString(),
+  })),
+};
+---
+<!doctype html>
+<html lang={site.language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    {noindex
+      ? <meta name="robots" content="noindex,nofollow" />
+      : <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />
+    }
+
+    <!-- Paikallistieto -->
+    <meta name="geo.region" content={site.address.regionCode} />
+    <meta name="geo.placename" content={site.address.city} />
+    <meta name="geo.position" content={`${site.geo.latitude};${site.geo.longitude}`} />
+    <meta name="ICBM" content={`${site.geo.latitude}, ${site.geo.longitude}`} />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content={site.locale} />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImageUrl} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Fontit (preconnect + display=swap = nopea LCP) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
+
+    <!-- LocalBusiness schema vain valituilla sivuilla (etusivu, yhteystiedot) -->
+    {includeLocalBusinessSchema && <SchemaLocalBusiness />}
+
+    <!-- Breadcrumb schema -->
+    {breadcrumbLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />
+    )}
+  </head>
+  <body>
+    <Header />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
